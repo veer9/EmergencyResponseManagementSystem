@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %} ERMS -- Report {% endblock %}
+{% block content %}
+
+
+<h3> Resource Report by Primary Emergency Support Function </h3>
+
+
+
+<table class="alternate" border="1">
+  <tr height="50">
+    <th width = 10%>#</th>
+    <th width = 50%>Primary Emergency Support Function</th>
+    <th width = 20%>Total Resources</th>
+    <th width = 20%>Resources In Use</th>
+    
+   </tr>
+   {% for row in records %}
+  <tr>
+    <td>{{row.esf_id}}</td>
+    <td>{{row.esf_desc}}</td>
+    {% if row.resources_total == None %}
+    <td>0</td>
+    {%else%}
+    <td>{{row.resources_total}}</td>
+    {% endif %}
+
+    {% if row.resources_in_use == None %}
+    <td>0</td>
+    {%else%}
+    <td>{{row.resources_in_use}}</td>
+    {% endif %}
+
+
+  </tr>
+ 	{% endfor %}
+</table>
+
+
+
+{% endblock %}

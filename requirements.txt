@@ -1,0 +1,6 @@
+Flask_Login==0.2.11
+Flask-WTF==0.13.1
+Flask==0.11.1
+
+
+

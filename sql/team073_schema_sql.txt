@@ -1,0 +1,187 @@
+CREATE DATABASE IF NOT EXISTS team073;
+USE team073;
+
+DROP TABLE IF EXISTS `USER`;
+CREATE TABLE IF NOT EXISTS `User` (
+	Username varchar(50) NOT NULL,
+	FirstName varchar(50) NOT NULL,
+	LastName varchar(50) NOT NULL,
+	Passwd varchar(50) NOT NULL,
+	PRIMARY KEY (Username))
+ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `team073`.`User` (`Username`, `FirstName`, `LastName`, `Passwd`) VALUES ('fema', 'fema', 'federal', 'abc123');
+
+
+
+DROP TABLE IF EXISTS `Municipality`;
+CREATE TABLE IF NOT EXISTS `Municipality` (
+	Username varchar(50) NOT NULL,
+	PopulationSize INT NOT NULL,
+    PRIMARY KEY (Username))
+ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+
+DROP TABLE IF EXISTS `Gvt_Agency`;
+CREATE TABLE IF NOT EXISTS `Gvt_Agency` (
+	Username varchar(50) NOT NULL,
+	Jurisdiction varchar(50) NOT NULL,
+	PRIMARY KEY (Username))
+ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `team073`.`Gvt_Agency` (`Username`, `Jurisdiction`) VALUES ('fema', 'federal');
+
+
+
+DROP TABLE IF EXISTS `Company` ;
+CREATE TABLE IF NOT EXISTS `Company` (
+	Username varchar(50) NOT NULL,
+	Headquarters varchar(50) NOT NULL,
+	PRIMARY KEY (Username))
+ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+
+DROP TABLE IF EXISTS `Individual`;
+CREATE TABLE IF NOT EXISTS `Individual` (
+	Username varchar(50) NOT NULL,
+	JobTitle varchar(50) NOT NULL,
+	HiredDate timestamp NOT NULL,
+	PRIMARY KEY (Username))
+ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+DROP TABLE IF EXISTS `Incident`;
+CREATE TABLE IF NOT EXISTS `Incident` (
+	IncidentID INT NOT NULL AUTO_INCREMENT,
+	IncidentDate date NOT NULL,
+	Description varchar(50) NOT NULL,
+	Longitude decimal(12,9) NOT NULL,
+	Latitude decimal(12,9) NOT NULL,
+	Username varchar(50) NOT NULL,
+	PRIMARY KEY (IncidentID))
+ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+
+DROP TABLE IF EXISTS `Resources`;
+CREATE TABLE IF NOT EXISTS `Resources` (
+	ResourceID INT NOT NULL AUTO_INCREMENT,
+	ResourceName varchar(50) NOT NULL,
+	Model varchar(50),
+	Time_Cost varchar(10) NOT NULL,
+	Price_Cost decimal NOT NULL,
+	Longitude decimal(12,9) NOT NULL,
+	Latitude decimal(12,9) NOT NULL,
+	Username varchar(50) NOT NULL,
+	PRIMARY KEY (ResourceID))
+ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+DROP TABLE IF EXISTS `ESF`;
+CREATE TABLE  IF NOT EXISTS `ESF`(
+	ESFId INT NOT NULL,
+	ESFDescription varchar(300) NOT NULL,
+	PRIMARY KEY (ESFId))
+ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `team073`.`ESF` (`ESFId`, `ESFDescription`) VALUES (1, '#1 – Transportation');
+INSERT INTO `team073`.`ESF` (`ESFId`, `ESFDescription`) VALUES (2, '#2 – Communications');
+INSERT INTO `team073`.`ESF` (`ESFId`, `ESFDescription`) VALUES (3, '#3 – Public Works and Engineering');
+INSERT INTO `team073`.`ESF` (`ESFId`, `ESFDescription`) VALUES (4, '#4 – Firefighting');
+INSERT INTO `team073`.`ESF` (`ESFId`, `ESFDescription`) VALUES (5, '#5 – Emergency Management');
+INSERT INTO `team073`.`ESF` (`ESFId`, `ESFDescription`) VALUES (6, '#6 – Mass Care, Emergency Assistance, Housing, and Human Services');
+INSERT INTO `team073`.`ESF` (`ESFId`, `ESFDescription`) VALUES (7, '#7 – Logistics Management and Resource Support');
+INSERT INTO `team073`.`ESF` (`ESFId`, `ESFDescription`) VALUES (8, '#8 – Public Health and Medical Services');
+INSERT INTO `team073`.`ESF` (`ESFId`, `ESFDescription`) VALUES (9, '#9 – Search and Rescue');
+INSERT INTO `team073`.`ESF` (`ESFId`, `ESFDescription`) VALUES (10, '#10 – Oil and Hazardous Materials Response');
+INSERT INTO `team073`.`ESF` (`ESFId`, `ESFDescription`) VALUES (11, '#11 – Agriculture and Natural Resources');
+INSERT INTO `team073`.`ESF` (`ESFId`, `ESFDescription`) VALUES (12, '#12 – Energy');
+INSERT INTO `team073`.`ESF` (`ESFId`, `ESFDescription`) VALUES (13, '#13 – Public Safety and Security');
+INSERT INTO `team073`.`ESF` (`ESFId`, `ESFDescription`) VALUES (14, '#14 – Long-Term Community Recovery');
+INSERT INTO `team073`.`ESF` (`ESFId`, `ESFDescription`) VALUES (15, '#15 – External Affairs');
+
+
+DROP TABLE IF EXISTS `RES_ESF`;
+CREATE TABLE  IF NOT EXISTS  `RES_ESF`(
+	ResourceID INT NOT NULL,
+	ESFId INT NOT NULL,
+	PrimaryESFInd varchar(15),
+	PRIMARY KEY(ResourceID, ESFId))
+ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `Capabilities`;
+CREATE TABLE IF NOT EXISTS `Capabilities`(
+	ResourceID INT NOT NULL,
+	Capability varchar(50) NOT NULL,
+	PRIMARY KEY (ResourceID, Capability))
+ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `Resource_Requested`;
+CREATE TABLE IF NOT EXISTS `Resource_Requested`(
+	StartDate datetime,
+	EndDate datetime,
+	Status_State varchar(50),
+	ResourceID INT NOT NULL,
+	IncidentID INT NOT NULL,
+	PRIMARY KEY (ResourceID, IncidentID))
+	ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `Repairs`;
+CREATE TABLE IF NOT EXISTS `Repairs`(
+	RepairId INT NOT NULL AUTO_INCREMENT,
+	StartDate datetime,
+	EndDate datetime,
+	ResourceID INT NOT NULL,
+	PRIMARY KEY (RepairId, ResourceID))
+	ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+ALTER TABLE `Municipality`
+	ADD CONSTRAINT municipal_ibfk_1 FOREIGN KEY (Username) REFERENCES `User` (Username);
+
+ALTER TABLE `Gvt_Agency`
+	ADD CONSTRAINT gvt_ibfk_1 FOREIGN KEY (Username) REFERENCES `User` (Username);
+
+
+ALTER TABLE `Company`
+	ADD CONSTRAINT company_ibfk_1 FOREIGN KEY (Username) REFERENCES `User` (Username);
+
+ALTER TABLE `Individual`
+	ADD CONSTRAINT individual_ibfk_1 FOREIGN KEY (Username) REFERENCES `User` (Username);
+
+ALTER TABLE `Incident`
+	ADD CONSTRAINT incident_ibfk_1 FOREIGN KEY (Username) REFERENCES `User` (Username);
+
+ALTER TABLE `Resources`
+	ADD CONSTRAINT resources_ibfk_1 FOREIGN KEY (Username) REFERENCES `User` (Username);
+
+ALTER TABLE `RES_ESF`
+	ADD CONSTRAINT resesf_ibfk_1 FOREIGN KEY (ResourceID) REFERENCES `Resources` (ResourceID),
+	ADD CONSTRAINT resesf_ibfk_2 FOREIGN KEY (ESFId) REFERENCES `ESF` (ESFId);
+
+ALTER TABLE `Capabilities`
+	ADD CONSTRAINT capable_ibfk_1 FOREIGN KEY (ResourceID) REFERENCES `Resources` (ResourceID);
+
+ALTER TABLE `Resource_Requested`
+	ADD CONSTRAINT resstatus_ibfk_1 FOREIGN KEY (ResourceID) REFERENCES `Resources` (ResourceID),
+	ADD CONSTRAINT resstatus_ibfk_2 FOREIGN KEY (IncidentID) REFERENCES `Incident` (IncidentID);
+
+ALTER TABLE `Repairs`
+	ADD CONSTRAINT repairs_ibfk_1 FOREIGN KEY (ResourceID) REFERENCES `Resources` (ResourceID);
+
+CREATE TABLE  team073.CostDuration (
+	id INT NOT NULL AUTO_INCREMENT,
+	cost_duration varchar(50) NOT NULL,
+    PRIMARY KEY (id)
+    );
+
+  INSERT INTO team073.CostDuration (cost_duration) VALUES ('day');
+	INSERT INTO team073.CostDuration (cost_duration) VALUES ('hour');
+	INSERT INTO team073.CostDuration (cost_duration) VALUES ('week');

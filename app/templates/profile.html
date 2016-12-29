@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %} ERMS -- Profile {% endblock %}
+{% block content %}
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container">
+	<div class="row">
+		<div class="col-lg-3 col-sm-6">
+			<form class="form-signin" method="post" action="#">
+            <div class="card hovercard">
+                <div class="cardheader">
+
+                </div>
+                <div class="avatar">
+                    <img alt="" src="">
+                </div>
+                <div class="info">
+                    <div class="title">
+                        <a target="_blank" href="#">{{form.firstname }} {{form.lastname }}</a>
+                    </div>
+                    {% if form.jurisdiction %}
+                    <div class="desc">{{form.jurisdiction }}</div>
+                      {% endif %}
+                     {% if form.populationSize%}
+                    <div class="desc">{{form.populationSize }}</div>
+                      {% endif %}
+                      {% if form.headquarters%}
+                    <div class="desc">{{form.headquarters }}</div>
+                      {% endif %}
+                      {% if form.jobTitle %}
+                    <div class="desc">{{form.jobTitle }}</div>
+                      {% endif %}
+                      {% if form.hiredDate %}
+                    <div class="desc">{{form.hiredDate }}</div>
+                      {% endif %}
+                    
+                </div>
+                <div class="bottom">
+                    <a class="btn btn-primary btn-twitter btn-sm" href="https://twitter.com/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                    <a class="btn btn-danger btn-sm" rel="publisher"
+                       href="https://plus.google.com/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                    <a class="btn btn-primary btn-sm" rel="publisher"
+                       href="https://plus.google.com/">
+                        <i class="fa fa-facebook"></i>
+                    </a>
+                    <a class="btn btn-warning btn-sm" rel="publisher" href="https://plus.google.com/">
+                        <i class="fa fa-behance"></i>
+                    </a>
+                </div>
+            </div>
+            </form>
+        </div>
+
+
+	</div>
+  <h3> Current Status of my resources</h3>
+
+
+
+<table class="alternate" border="1" width="450">
+  <tr height="50">
+    <th width = 20%>#</th>
+    <th width = 50%>Resource Name</th>
+    <th width = 30%>Status</th>
+    
+   </tr>
+   {% for row in records %}
+  <tr>
+    <td>{{row.resource_id}}</td>
+    <td>{{row.resource_name}}</td>
+    
+    <td>{{row.action}}</td>
+   
+
+
+  </tr>
+  {% endfor %}
+</table>
+
+
+</div>
+
+{% endblock %}

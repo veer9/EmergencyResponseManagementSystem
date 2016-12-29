@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %} ERMS -- Resources {% endblock %}
+{% block content %}
+{% from "error_macro.html" import render_field %}
+<div class="container">
+
+  <form class="form-signin" method="post" action="/add_resources/">
+  {{ form.csrf_token }}
+
+<h2 class="form-signin-heading">Add a Resource</h2>
+
+
+
+  <section >
+  <table class="form input" >
+    <tr>
+      <td class="clabel">Resource ID</td>
+      <td>{{form.resource_id(readonly=true) }}</td>
+    </tr>
+    <tr>
+      <td class="clabel">Owner</td>
+      <td>{{owner }}</td>
+    </tr>
+    <tr>
+      <td class="clabel">Resource Name</td>
+      <td>{{form.resource_name() }}</td>
+    </tr>
+    <tr>
+      {{ render_field(form.resource_name) }}
+    </tr>
+    <tr>
+      <td class="clabel">Primary ESF</td>
+      <td>{{form.primary_esf(id='pesf_select') }}</td>
+    </tr>
+    <tr>
+      {{ render_field(form.primary_esf) }}
+    </tr>
+    <tr>
+      <td class="clabel">Additonal ESFs</td>
+      <td>{{form.additional_esfs(id='sesf_select') }}</td>
+    </tr>
+    <tr>
+      <td class="clabel">Model</td>
+      <td>{{form.model() }}</td>
+    </tr>
+    <tr>
+      {{ render_field(form.model) }}
+    </tr>
+    <tr>
+      <td class="clabel">Capabilities</td>
+      <td>{{form.capabilities(id='res_cap',width='10',readonly=true) }}</td>
+    </tr>
+    <tr>
+      <td class="clabel">Add Capability</td>
+      <td>{{form.add_capability(id='add_cap') }}<a id="addToList" href="#">Add</a></td>
+
+
+      </tr>
+    <tr>
+      <td class="clabel">Home Location</td>
+      <td >Latitiude:{{form.latitude() }}</td>
+      </tr>
+      <tr>
+      {{ render_field(form.latitude) }}
+    </tr>
+      <tr>
+      <td></td>
+      <td >Longitude:{{form.longitude() }}</td>
+    </tr>
+    <tr>
+      {{ render_field(form.longitude) }}
+    </tr>
+    <tr>
+
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td class="clabel">Cost</td>
+      <td>$ {{form.cost() }}</td>
+      </tr>
+      <tr>
+      {{ render_field(form.cost) }}
+    </tr>
+      <tr>
+      <td></td>
+      <td>per {{form.cost_duration() }}</td>
+    </tr>
+    <tr>
+      {{ render_field(form.cost_duration) }}
+    </tr>
+    <tr>
+
+      <td></td>
+      <td></td>
+    </tr>
+
+    <tr>
+      <td >
+        <button class="btn btn-group-sm btn-primary" type="submit" >Save</button>
+      </td>
+      <td>
+        <button class="btn btn-group-sm btn-primary" type="submit">Cancel</button>
+      </td>
+    </tr>
+  </table>
+
+
+
+  </section>
+
+
+
+  </form>
+
+</div> <!-- /container -->
+{% endblock %}

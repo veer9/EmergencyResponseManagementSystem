@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %} ERMS -- Incidents {% endblock %}
+{% block content %}
+{% from "error_macro.html" import render_field %}
+<div class="container">
+
+  <form class="form-signin" method="post" action="/add_incidents/">
+{{ form.csrf_token }}
+<h2 class="form-signin-heading">New Incident Info</h2>
+
+
+  <section >
+  <table class="form input" >
+    <tr>
+      <td class="clabel">Incident ID</td>
+      <td>{{form.incident_id(readonly=true) }}</td>
+    </tr>
+    <tr>
+      {{ render_field(form.incident_id) }}
+    </tr>
+    <tr>
+      <td class="clabel">Date</td>
+      <td>{{form.date() }}</td>
+    </tr>
+    <tr>
+      {{ render_field(form.date) }}
+    </tr>
+    <tr>
+      <td class="clabel">Description</td>
+      <td>{{form.description() }}</td>
+    </tr>
+    <tr>
+      {{ render_field(form.description) }}
+    </tr>
+    <tr>
+      <td class="clabel">Location</td>
+      <td >Latitiude:{{form.latitude() }}</td>
+      <td >Longitude:{{form.longitude() }}</td>
+    </tr>
+    <tr>
+      {{ render_field(form.latitude) }}
+      {{ render_field(form.longitude) }}
+    </tr>
+    <tr>
+
+      <td></td>
+      <td></td>
+    </tr>
+
+    <tr>
+
+      <td></td>
+      <td></td>
+    </tr>
+
+    <tr>
+      <td >
+        <button class="btn btn-group-sm btn-primary" type="submit">Save</button>
+      </td>
+      <td>
+        <button class="btn btn-group-sm btn-primary" type="submit">Cancel</button>
+      </td>
+    </tr>
+  </table>
+
+
+
+  </section>
+
+
+
+  </form>
+
+</div> <!-- /container -->
+{% endblock %}

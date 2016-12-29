@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block title %} ERMS -- Search Resources {% endblock %}
+{% block content %}
+<div class="container">
+
+  <form class="form-signin" method="post" action="/search/">
+{{ form.csrf_token }}
+<h2 class="form-signin-heading">Search Resource</h2>
+
+  <section >
+  <table class="form input" >
+
+
+    <tr>
+
+      <td class="clabel">Keyword</td>
+      <td>{{form.keyword() }} search by resource name , model or capabiltity </td>
+
+    </tr>
+    <tr>
+      <td class="clabel">Primary ESF</td>
+      <td>{{form.esf() }}</td>
+    </tr>
+    <tr>
+      <td class="clabel">Location</td>
+      <td width="220">Within {{form.location(size=10) }} kilometers of incident</td>
+    </tr>
+    <tr>
+      <td class="clabel">Incident</td>
+      <td>{{form.incident_list() }}</td>
+    </tr>
+
+      <td></td>
+      <td></td>
+    </tr>
+
+    <tr>
+      <td >
+        <button class="btn btn-group-sm btn-primary" type="submit">Search</button>
+      </td>
+      <td>
+        <button class="btn btn-group-sm btn-primary" type="submit">Cancel</button>
+      </td>
+    </tr>
+
+  </table>
+  </section>
+</form>
+{% if records %}
+
+<div class= "" display:"none">
+  <h3>Search Results</h3>
+  <table class="alternate" border="1" id="t01">
+  <tr>
+    <th width = 10%>ID</th>
+    <th width = 20%>Resource Name</th>
+    <th width = 20%>Owner</th>
+     <th width = 10%> Cost </th>
+     <th width = 10%> Next Available Date </th>
+     <th width = 10%> Status </th>
+     {% if all_columns %}
+     <th width = 10%> Distance </th>
+     <th width = 10%> Action </th>
+     {% endif %}
+
+  </tr>
+
+
+
+
+
+<h4> Search Results for Incident '{{ incident_desc }}'</h4>
+<br>
+{% for row in records %}
+<tr>
+    <td>{{ row.resource_id }} </td>
+    <td>{{ row.resource_name }} </td>
+    <td> {{ row.owner }} </td>
+    <td> {{ row.cost }} </td>
+    <td> {{ row.nextAvailableDate }} </td>
+     <td>{{ row.status }} </td>
+    {% if all_columns %}
+    <td> {{ row.distance }} </td>
+      {% if row.action == "Deploy-Repair" %}
+      <td> <button type="button" class="btn btn-group-sm btn-primary" data-toggle="modal" data-target="#DeployModal" data-resourceid={{row.resource_id}} data-incidentid={{incident_id}} data-action="Deploy">Deploy</button>
+     <button type="button" class="btn btn-group-sm btn-primary" data-toggle="modal" data-target="#RepairModal" data-resourceid={{row.resource_id}} data-incidentid={{incident_id}} data-nextdate={{row.nextAvailableDate}} data-action="Repair">Repair</button>
+      {% else %}
+      <td>
+       {% if row.action != None %}
+       <button type="button" class="btn btn-group-sm btn-primary" data-toggle="modal" data-target="#{{ row.action }}Modal" data-resourceid={{row.resource_id}} data-incidentid={{incident_id}} data-action={{row.action}}>{{ row.action }}</button>
+       {% endif %}
+      </td>
+      {% endif %}
+    {% endif %}
+</tr>
+{% endfor %}
+</table>
+</div>
+
+{% endif %}
+
+<div class="modal fade" id="RequestModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">Request Resource</h4>
+      </div>
+      <div class="modal-body">
+        <form id= "myrequest" method="post">
+          <input type="hidden" name="incident-id" id="incident-id" >
+           <input type="hidden" name="resource-id" id="resource-id" >
+          <div class="form-group">
+            <label for="start-date" class="control-label">Start Date:</label>
+            <input type="text" class="form-control" id="start-date" name="start-date">
+          </div>
+          <div class="form-group">
+            <label for="end-date" class="control-label">End Date:</label>
+            <input type="text" class="form-control" id="end-date" name="end-date">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" >Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="DeployModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">Deploy Resource</h4>
+      </div>
+      <div class="modal-body">
+        <form id= "deployrequest" method="post">
+          <input type="hidden" name="incident-id" id="incident-id" >
+           <input type="hidden" name="resource-id" id="resource-id" >
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" >Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="RepairModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">Repair Resource</h4>
+      </div>
+      <div class="modal-body">
+        <form id= "repairrequest" method="post">
+          <input type="hidden" name="r-incident-id" id="r-incident-id" >
+           <input type="hidden" name="r-resource-id" id="r-resource-id" >
+           <input type="hidden" name="r-start-date" id="r-start-date" >
+          <div class="form-group">
+            <label for="start-date" class="control-label">Enter number of days:</label>
+            <input type="text" class="form-control" id="repair-days" name="repair-days">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" >Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div> <!-- /container -->
+{% endblock %}
